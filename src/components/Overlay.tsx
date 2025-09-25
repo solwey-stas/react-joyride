@@ -1,5 +1,6 @@
 import * as React from 'react';
 import treeChanges from 'tree-changes';
+import {AnimatePresence, motion} from 'framer-motion';
 
 import {
   getClientRect,
@@ -9,12 +10,12 @@ import {
   getScrollParent,
   hasCustomScrollParent,
   hasPosition,
-} from '~/modules/dom';
-import { getBrowser, isLegacy, log } from '~/modules/helpers';
+} from '../modules/dom';
+import { getBrowser, isLegacy, log } from '../modules/helpers';
 
-import { LIFECYCLE } from '~/literals';
+import { LIFECYCLE } from '../literals';
 
-import { Lifecycle, OverlayProps } from '~/types';
+import { Lifecycle, OverlayProps } from '../types';
 
 import Spotlight from './Spotlight';
 
@@ -225,9 +226,9 @@ export default class JoyrideOverlay extends React.Component<OverlayProps, State>
     const { onClickOverlay, placement } = this.props;
     const { hideSpotlight, overlayStyles, spotlightStyles } = this;
 
-    if (hideSpotlight()) {
-      return null;
-    }
+    // if (hideSpotlight()) {
+    //   return null;
+    // }
 
     let spotlight = placement !== 'center' && showSpotlight && (
       <Spotlight styles={spotlightStyles} />
@@ -242,15 +243,23 @@ export default class JoyrideOverlay extends React.Component<OverlayProps, State>
     }
 
     return (
-      <div
-        className="react-joyride__overlay"
-        data-test-id="overlay"
-        onClick={onClickOverlay}
-        role="presentation"
-        style={overlayStyles}
-      >
-        {spotlight}
-      </div>
+      <AnimatePresence>
+        { !hideSpotlight() && (
+          <motion.div
+            className="react-joyride__overlay"
+            data-test-id="overlay"
+            onClick={onClickOverlay}
+            role="presentation"
+            style={overlayStyles}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }} // Adjust duration
+          >
+            {spotlight}
+          </motion.div>
+        )}
+      </AnimatePresence>
     );
   }
 }

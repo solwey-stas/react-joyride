@@ -1,6 +1,6 @@
-import { noop } from '~/modules/helpers';
+import { noop } from './modules/helpers';
 
-import { FloaterProps, Locale, Props, Step } from '~/types';
+import { FloaterProps, Locale, Props, Step } from './types';
 
 export const defaultFloaterProps: FloaterProps = {
   options: {

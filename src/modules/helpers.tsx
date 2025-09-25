@@ -3,9 +3,9 @@ import { createPortal } from 'react-dom';
 import innerText from 'react-innertext';
 import is from 'is-lite';
 
-import { LIFECYCLE } from '~/literals';
+import { LIFECYCLE } from '../literals';
 
-import { AnyObject, Lifecycle, NarrowPlainObject, Step } from '~/types';
+import { AnyObject, Lifecycle, NarrowPlainObject, Step } from '../types';
 
 import { hasPosition } from './dom';
 

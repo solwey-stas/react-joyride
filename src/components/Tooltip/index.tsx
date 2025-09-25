@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { getReactNodeText, replaceLocaleContent } from '~/modules/helpers';
+import { getReactNodeText, replaceLocaleContent } from '../../modules/helpers';
 
-import { TooltipProps } from '~/types';
+import { TooltipProps } from '../../types';
 
 import Container from './Container';
 

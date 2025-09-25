@@ -3,9 +3,9 @@ import deepmerge from 'deepmerge';
 import is from 'is-lite';
 import { SetRequired } from 'type-fest';
 
-import { defaultFloaterProps, defaultLocale, defaultStep } from '~/defaults';
-import getStyles from '~/styles';
-import { Props, Step, StepMerged } from '~/types';
+import { defaultFloaterProps, defaultLocale, defaultStep } from '../defaults';
+import getStyles from '../styles';
+import { Props, Step, StepMerged } from '../types';
 
 import { getElement, hasCustomScrollParent } from './dom';
 import { log, omit, pick } from './helpers';

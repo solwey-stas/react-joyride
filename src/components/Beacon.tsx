@@ -1,9 +1,9 @@
 import * as React from 'react';
 import is from 'is-lite';
 
-import { getReactNodeText } from '~/modules/helpers';
+import { getReactNodeText } from '../modules/helpers';
 
-import { BeaconProps } from '~/types';
+import { BeaconProps } from '../types';
 
 export default class JoyrideBeacon extends React.Component<BeaconProps> {
   private beacon: HTMLElement | null = null;

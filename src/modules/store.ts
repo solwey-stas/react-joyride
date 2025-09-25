@@ -1,9 +1,9 @@
 import { Props as FloaterProps } from 'react-floater';
 import is from 'is-lite';
 
-import { ACTIONS, LIFECYCLE, STATUS } from '~/literals';
+import { ACTIONS, LIFECYCLE, STATUS } from '../literals';
 
-import { Origin, State, Status, Step, StoreHelpers, StoreOptions } from '~/types';
+import { Origin, State, Status, Step, StoreHelpers, StoreOptions } from '../types';
 
 import { hasValidKeys, objectKeys, omit } from './helpers';
 
@@ -79,7 +79,7 @@ class Store {
       lifecycle: state.lifecycle ?? LIFECYCLE.INIT,
       origin: state.origin ?? null,
       size: state.size ?? size,
-      status: nextIndex === size ? STATUS.FINISHED : state.status ?? status,
+      status: nextIndex === size ? STATUS.FINISHED : (state.status ?? status),
     };
   }
 
