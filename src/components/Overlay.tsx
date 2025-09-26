@@ -17,8 +17,6 @@ import { LIFECYCLE } from '../literals';
 
 import { Lifecycle, OverlayProps } from '../types';
 
-import Spotlight from './Spotlight';
-
 interface State {
   isScrolling: boolean;
   mouseOverSpotlight: boolean;
@@ -156,11 +154,9 @@ export default class JoyrideOverlay extends React.Component<OverlayProps, State>
       ...(isLegacy() ? styles.spotlightLegacy : styles.spotlight),
       height: Math.round((elementRect?.height ?? 0) + spotlightPadding * 2),
       left: Math.round((elementRect?.left ?? 0) - spotlightPadding),
-      opacity: showSpotlight ? 1 : 0,
       pointerEvents: spotlightClicks ? 'none' : 'auto',
       position: isFixedTarget ? 'fixed' : 'absolute',
       top,
-      transition: 'opacity 0.2s',
       width: Math.round((elementRect?.width ?? 0) + spotlightPadding * 2),
     } satisfies React.CSSProperties;
   }
@@ -184,19 +180,7 @@ export default class JoyrideOverlay extends React.Component<OverlayProps, State>
     const { target } = this.props;
     const element = getElement(target);
 
-    if (this.scrollParent !== document) {
-      const { isScrolling } = this.state;
-
-      if (!isScrolling) {
-        this.updateState({ isScrolling: true, showSpotlight: false });
-      }
-
-      clearTimeout(this.scrollTimeout);
-
-      this.scrollTimeout = window.setTimeout(() => {
-        this.updateState({ isScrolling: false, showSpotlight: true });
-      }, 50);
-    } else if (hasPosition(element, 'sticky')) {
+    if (this.scrollParent !== document || hasPosition(element, 'sticky')) {
       this.updateState({});
     }
   };
@@ -223,24 +207,21 @@ export default class JoyrideOverlay extends React.Component<OverlayProps, State>
 
   render() {
     const { showSpotlight } = this.state;
-    const { onClickOverlay, placement } = this.props;
+    const { onClickOverlay, placement, target } = this.props;
     const { hideSpotlight, overlayStyles, spotlightStyles } = this;
 
-    // if (hideSpotlight()) {
-    //   return null;
-    // }
-
     let spotlight = placement !== 'center' && showSpotlight && (
-      <Spotlight styles={spotlightStyles} />
+      <motion.div
+        key={target.toString()}
+        className="react-joyride__spotlight"
+        data-test-id="spotlight"
+        style={spotlightStyles}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+      />
     );
-
-    // Hack for Safari bug with mix-blend-mode with z-index
-    if (getBrowser() === 'safari') {
-      const { mixBlendMode, zIndex, ...safariOverlay } = overlayStyles;
-
-      spotlight = <div style={{ ...safariOverlay }}>{spotlight}</div>;
-      delete overlayStyles.backgroundColor;
-    }
 
     return (
       <AnimatePresence>
@@ -254,9 +235,11 @@ export default class JoyrideOverlay extends React.Component<OverlayProps, State>
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }} // Adjust duration
+            transition={{ duration: 0.2 }}
           >
-            {spotlight}
+            <AnimatePresence>
+              {spotlight}
+            </AnimatePresence>
           </motion.div>
         )}
       </AnimatePresence>
